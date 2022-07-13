@@ -9,7 +9,8 @@
         round
         size="mini"
         @click="isEdit = !isEdit"
-      >{{ isEdit ? '完成' : '编辑' }}</van-button>
+        >{{ isEdit ? '完成' : '编辑' }}</van-button
+      >
     </van-cell>
     <van-grid class="my-grid" :gutter="10">
       <van-grid-item
@@ -30,11 +31,9 @@
           slot="icon"
           name="clear"
         ></van-icon>
-        <span
-          class="text"
-          :class="{ active: index === active }"
-          slot="text"
-        >{{ channel.name }}</span>
+        <span class="text" :class="{ active: index === active }" slot="text">{{
+          channel.name
+        }}</span>
       </van-grid-item>
     </van-grid>
 
@@ -57,7 +56,11 @@
 </template>
 
 <script>
-import { getAllChannels, addUserChannel, deleteUserChannel } from '@/api/channel'
+import {
+  getAllChannels,
+  addUserChannel,
+  deleteUserChannel
+} from '@/api/channel'
 import { mapState } from 'vuex'
 import { setItem } from '@/utils/storage'
 export default {
@@ -73,7 +76,7 @@ export default {
       required: true
     }
   },
-  data () {
+  data() {
     return {
       allChannels: [], // 所有频道
       isEdit: false, // 控制编辑状态的显示
@@ -84,7 +87,7 @@ export default {
     ...mapState(['user']),
     // 计算属性会观测内部依赖数据的变化
     // 如果依赖的数据发生变化，则计算属性会重新执行
-    recommendChannels () {
+    recommendChannels() {
       // 数组的 filter 方法：遍历数组，把符合条件的元素存储到新数组中并返回
       return this.allChannels.filter(channel => {
         // const channels = []
@@ -116,12 +119,12 @@ export default {
     // }
   },
   watch: {},
-  created () {
+  created() {
     this.loadAllChannels()
   },
-  mounted () {},
+  mounted() {},
   methods: {
-    async loadAllChannels () {
+    async loadAllChannels() {
       try {
         const { data } = await getAllChannels()
         this.allChannels = data.data.channels
@@ -130,7 +133,7 @@ export default {
       }
     },
 
-    async onAddChannel (channel) {
+    async onAddChannel(channel) {
       this.myChannels.push(channel)
       // 数据持久化处理
       if (this.user) {
@@ -148,7 +151,7 @@ export default {
         setItem('TOUTIAO_CHANNELS', this.myChannels)
       }
     },
-    onMyChannelClick (channel, index) {
+    onMyChannelClick(channel, index) {
       if (this.isEdit) {
         // 1. 如果是固定频道，则不删除
         if (this.fiexdChannels.includes(channel.id)) {
@@ -174,7 +177,7 @@ export default {
       }
     },
 
-    async deleteChannel (channel) {
+    async deleteChannel(channel) {
       try {
         if (this.user) {
           // 将数据更新到线上
@@ -213,7 +216,8 @@ export default {
     .van-grid-item__content {
       white-space: nowrap;
       background-color: #f4f5f6;
-      .van-grid-item__text, .text {
+      .van-grid-item__text,
+      .text {
         font-size: 28px;
         color: #222;
         margin-top: 0;
@@ -248,7 +252,6 @@ export default {
           font-size: 28px;
           margin-right: 6px;
         }
-
       }
     }
   }

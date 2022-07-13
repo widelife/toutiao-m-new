@@ -1,24 +1,41 @@
 <template>
   <div class="article-container">
     <!-- 导航栏 -->
-    <van-nav-bar class="page-nav-bar" left-arrow title="黑马头条"></van-nav-bar>
+    <van-nav-bar
+      class="page-nav-bar"
+      left-arrow
+      title="黑马头条"
+    ></van-nav-bar>
     <!-- /导航栏 -->
 
     <div class="main-wrap">
       <!-- 加载中 -->
-      <div v-if="loading" class="loading-wrap">
-        <van-loading color="#3296fa" vertical>加载中</van-loading>
+      <div
+        v-if="loading"
+        class="loading-wrap"
+      >
+        <van-loading
+          color="#3296fa"
+          vertical
+        >加载中</van-loading>
       </div>
       <!-- /加载中 -->
 
       <!-- 加载完成-文章详情 -->
-      <div v-else-if="article.title" class="article-detail">
+      <div
+        v-else-if="article.title"
+        class="article-detail"
+      >
         <!-- 文章标题 -->
         <h1 class="article-title">{{ article.title }}</h1>
         <!-- /文章标题 -->
 
         <!-- 用户信息 -->
-        <van-cell class="user-info" center :border="false">
+        <van-cell
+          class="user-info"
+          center
+          :border="false"
+        >
           <van-image
             class="avatar"
             slot="icon"
@@ -26,8 +43,14 @@
             fit="cover"
             :src="article.aut_photo"
           />
-          <div slot="title" class="user-name">{{ article.aut_name }}</div>
-          <div slot="label" class="publish-date">
+          <div
+            slot="title"
+            class="user-name"
+          >{{ article.aut_name }}</div>
+          <div
+            slot="label"
+            class="publish-date"
+          >
             {{ article.pubdate | relativeTime }}
           </div>
           <!-- 1.模板中的$event就是事件参数
@@ -91,17 +114,26 @@
       <!-- /加载完成-文章详情 -->
 
       <!-- 加载失败：404 -->
-      <div v-else-if="errStatus === 404" class="error-wrap">
+      <div
+        v-else-if="errStatus === 404"
+        class="error-wrap"
+      >
         <van-icon name="failure" />
         <p class="text">该资源不存在或已删除！</p>
       </div>
       <!-- /加载失败：404 -->
 
       <!-- 加载失败：其它未知错误（例如网络原因或服务端异常） -->
-      <div v-else class="error-wrap">
+      <div
+        v-else
+        class="error-wrap"
+      >
         <van-icon name="failure" />
         <p class="text">内容加载失败！</p>
-        <van-button @click="loadArticle" class="retry-btn">点击重试</van-button>
+        <van-button
+          @click="loadArticle"
+          class="retry-btn"
+        >点击重试</van-button>
       </div>
       <!-- /加载失败：其它未知错误（例如网络原因或服务端异常） -->
     </div>
@@ -114,9 +146,12 @@
         round
         size="small"
         @click="isPostShow = true"
-        >写评论</van-button
-      >
-      <van-icon name="comment-o" :info="totalCmt" color="#777" />
+      >写评论</van-button>
+      <van-icon
+        name="comment-o"
+        :info="totalCmt"
+        color="#777"
+      />
       <CollectArticle
         v-model="article.is_collected"
         :articleId="article.art_id"
@@ -127,11 +162,17 @@
         :articleId="article.art_id"
       ></LikeArticle>
       <!-- <van-icon color="#777" name="good-job-o" /> -->
-      <van-icon name="share" color="#777777"></van-icon>
+      <van-icon
+        name="share"
+        color="#777777"
+      ></van-icon>
     </div>
     <!-- /底部区域 -->
     <!-- 发布评论 -->
-    <van-popup v-model="isPostShow" position="bottom">
+    <van-popup
+      v-model="isPostShow"
+      position="bottom"
+    >
       <CommentPost
         :target="article.art_id"
         @post-success="onPostSuccsess"
@@ -140,7 +181,11 @@
     <!-- 发布评论 -->
     <!-- 评论回复 -->
     <!-- 弹出层是懒渲染的只有在第一次展示的时候才会渲染里面的内容 -->
-    <van-popup v-model="isReplyShow" position="bottom" style="height: 100%">
+    <van-popup
+      v-model="isReplyShow"
+      position="bottom"
+      style="height: 100%"
+    >
       <CommentReply
         v-if="isReplyShow"
         :comment="currentComment"
@@ -172,7 +217,7 @@ export default {
   },
   // 给所有后代组件提供数据
   // 不要滥用
-  provide: function() {
+  provide: function () {
     return {
       articleId: this.articleId
     }
@@ -183,7 +228,7 @@ export default {
       required: true
     }
   },
-  data() {
+  data () {
     return {
       article: {}, // 文章详情
       loading: true, // 加载中的loading状态
@@ -197,12 +242,12 @@ export default {
   },
   computed: {},
   watch: {},
-  created() {
+  created () {
     this.loadArticle()
   },
-  mounted() {},
+  mounted () { },
   methods: {
-    async loadArticle() {
+    async loadArticle () {
       this.loading = true
       try {
         const { data } = await getArticleById(this.articleId)
@@ -225,7 +270,7 @@ export default {
       }
       this.loading = false
     },
-    previewImg() {
+    previewImg () {
       const articleContent = this.$refs['article-content']
       const imgs = articleContent.querySelectorAll('img')
       const images = []
@@ -241,13 +286,13 @@ export default {
       })
       //   console.log(images)
     },
-    onPostSuccsess(data) {
+    onPostSuccsess (data) {
       // 关闭弹出层
       this.isPostShow = false
       // 将发布内容添加到列表的顶部
       this.commentList.unshift(data.new_obj)
     },
-    onReplyClick(comment) {
+    onReplyClick (comment) {
       this.currentComment = comment
       this.isReplyShow = true
     }
